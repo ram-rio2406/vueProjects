@@ -31,7 +31,7 @@
             <v-btn variant="tonal" class="v-col-auto">Login</v-btn>
           </v-col>
           <v-col>
-            <v-btn variant="tonal" class="v-col-auto">Signin</v-btn>
+            <v-btn variant="tonal" class="v-col-auto">Sign In</v-btn>
           </v-col>
         </v-row>
       </v-main>
