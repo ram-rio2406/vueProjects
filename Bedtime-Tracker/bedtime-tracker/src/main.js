@@ -1,7 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import Login from './pages/LoginPage.vue'
+import HomePage from './pages/HomePage.vue'
 
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 //vuetify
 import 'vuetify/styles';
@@ -13,13 +15,18 @@ const routes = [
 	{
 		name: 'Home',
 		path: '/',
-		component: App
+		component: HomePage
 	},
+	{
+		name: 'Login',
+		path: '/login',
+		component: Login
+	}
 ]
 
 const router = createRouter({
+	history: createWebHistory(),
 	routes,
-	history: createWebHashHistory()
 });
 
 const vuetify = createVuetify({
@@ -27,4 +34,8 @@ const vuetify = createVuetify({
 	directives,
 })
 
-createApp(App).use(router).use(vuetify).mount('#app');
+const app = createApp(App);
+
+app.use(router);
+app.use(vuetify);
+app.mount('#app');

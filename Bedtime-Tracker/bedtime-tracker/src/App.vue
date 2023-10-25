@@ -1,17 +1,14 @@
 <template>
-  <HomePage/>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 
-import HomePage from './pages/HomePage.vue'
-
 export default {
   name: 'App',
-  components: {
-    HomePage
-  }
 }
 </script>
 
