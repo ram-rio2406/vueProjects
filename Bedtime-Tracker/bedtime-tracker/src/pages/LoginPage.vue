@@ -12,7 +12,9 @@
         </v-row>
         <v-row>
             <v-col>
-                <v-btn variant="tonal" class="v-col-auto">Login</v-btn>
+                <router-link to="/dashboard">
+                    <v-btn variant="tonal" class="v-col-auto">Login</v-btn>
+                </router-link>
             </v-col>
             <v-col>
                 <v-btn variant="tonal" class="v-col-auto">Forgot Password</v-btn>
