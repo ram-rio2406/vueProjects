@@ -33,7 +33,9 @@
             </router-link>
           </v-col>
           <v-col>
-            <v-btn variant="tonal" class="v-col-auto">Sign In</v-btn>
+            <router-link to="/signin">
+              <v-btn variant="tonal" class="v-col-auto">Sign In</v-btn>
+            </router-link>
           </v-col>
         </v-row>
       </v-main>

@@ -5,13 +5,14 @@ import HomePage from './pages/HomePage.vue'
 import Dashboard from './pages/DashboardPage.vue'
 
 import { createRouter, createWebHistory } from 'vue-router';
-import { createStore } from 'vuex';
+import { pinia, useStore } from './store';
 
 //vuetify
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+import * as icons from '@mdi/font/css/materialdesignicons.css';
 
 const routes = [
 	{
@@ -23,6 +24,12 @@ const routes = [
 		name: 'Login',
 		path: '/login',
 		component: Login
+	},
+	{
+		name: 'SignIn',
+		path: '/signin',
+		component: Login,
+		props: {isNew : true}
 	},
 	{
 		name: 'Dashboard',
@@ -39,26 +46,15 @@ const router = createRouter({
 const vuetify = createVuetify({
 	components,
 	directives,
+	icons
 });
-
-const store = createStore({
-	//state is considered as data part which hold all the state variables inside this object 
-	state() {
-		return {
-			count: 0
-		}
-	},
-	//Mutations are used to change or modify the state only based on synchronous.
-	mutations: {
-		increment (state) {
-			state.count++
-		}
-	}
-})
 
 const app = createApp(App);
 
 app.use(router);
 app.use(vuetify);
-app.use(store);
+app.use(pinia);
+
+app.config.globalProperties.$store = useStore(pinia);
+
 app.mount('#app');
