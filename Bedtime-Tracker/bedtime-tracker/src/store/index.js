@@ -5,17 +5,16 @@ export const pinia = createPinia();
 export const useStore = defineStore('bedtime', {
     state() {
         return {
-            count: 0
+            userInfo: {
+                id: 'ramchandarSR'
+            }
         }
     },
 
     getters: {
-        getCount: (state) => state.count
+        getUserInfo: (state) => state.userInfo
     },
 
     actions: {
-        increment() {
-            this.count++;
-        }
     }
 });
