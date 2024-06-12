@@ -14,6 +14,19 @@
                 </v-col>
             </v-row>
         </v-container>
+            <v-row>
+                <v-col cols="6">
+                    <v-data-table
+                        :headers="headers"
+                        :items="entryList"
+                        density="compact"
+                        item-key="date"
+                    ></v-data-table>
+                </v-col>
+            </v-row>
+        <v-container>
+
+        </v-container>
         <v-dialog id="new-entry-overlay" v-model="isDialogOpen" 
             class="d-flex align-center justify-center" width="50%">
             <v-card title="Add Entry" class="d-flex justify-center align-center"
@@ -40,6 +53,7 @@
                                     <v-time-picker
                                     v-if="menu2"
                                     v-model="sleepTime"
+                                    format="24hr"
                                     full-width
                                     ></v-time-picker>
                                     <v-btn text="close" @click="menu2 = !menu2"></v-btn>
@@ -61,6 +75,7 @@
                                     <v-time-picker
                                     v-if="menu1"
                                     v-model="wakeUpTime"
+                                    format="24hr"
                                     full-width
                                     ></v-time-picker>
                                     <v-btn text="close" @click="menu1 = !menu1"></v-btn>
@@ -110,7 +125,13 @@ export default {
             sleepTime: null,
             wakeUpTime: null,
             isDialogOpen: false,
-            entryList: null,
+            entryList: [],
+            headers: [
+                { title: 'Date', align: 'center', sortable: true, key: 'date', value: item => new Date(item.date).toDateString() },
+                { title: 'Wake Up Time', align: 'center', sortable: false, key: 'wakeUpTime' },
+                { title: 'Sleep Time', align: 'center', sortable: false, key: 'sleepTime' },
+                { title: 'Sleep Duration', align: 'center', sortable: true, key: 'sleepDuration' }
+            ]
         }
     },
     methods: {
@@ -119,7 +140,7 @@ export default {
                 date: this.date,
                 sleepTime: this.sleepTime,
                 wakeUpTime: this.wakeUpTime,
-                sleepDuration: this.wakeUpTime - this.sleepTime,
+                sleepDuration: this.sleepTime - this.wakeUpTime,
             }
             this.entryList.push(newEntry);
             localStorage.setItem(`${this.$store.userInfo.id}-sleep-entries`, JSON.stringify(this.entryList));
