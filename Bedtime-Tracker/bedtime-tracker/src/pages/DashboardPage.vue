@@ -1,19 +1,20 @@
 <template>
     <div>
         <v-container align="center" justify="center">
-            <v-row>
+            <v-row justify="center">
                 <h1>Daily Tracker</h1>
             </v-row>
-            <v-row>
+            <v-row justify="center">
                 <v-col cols="3">
                     <v-btn class="text-none new-entry" prepend-icon="mdi-plus" 
-                        color="blue" variant="tonal" rounded="md" 
-                        size="x-large" @click="isDialogOpen = !isDialogOpen" >
-                        New Entry
+                        color="blue" variant="tonal" rounded="xl" 
+                        size="x-large" @click="isDialogOpen = !isDialogOpen" 
+                        text="New Entry">
                     </v-btn>
                 </v-col>
             </v-row>
         </v-container>
+        <v-container>
             <v-row>
                 <v-col cols="6">
                     <v-data-table
@@ -24,8 +25,6 @@
                     ></v-data-table>
                 </v-col>
             </v-row>
-        <v-container>
-
         </v-container>
         <v-dialog id="new-entry-overlay" v-model="isDialogOpen" 
             class="d-flex align-center justify-center" width="50%">
@@ -130,7 +129,8 @@ export default {
                 { title: 'Date', align: 'center', sortable: true, key: 'date', value: item => new Date(item.date).toDateString() },
                 { title: 'Wake Up Time', align: 'center', sortable: false, key: 'wakeUpTime' },
                 { title: 'Sleep Time', align: 'center', sortable: false, key: 'sleepTime' },
-                { title: 'Sleep Duration', align: 'center', sortable: true, key: 'sleepDuration' }
+                { title: 'Sleep Duration', align: 'center', sortable: true, key: 'sleepDuration',
+                    value: item => this.calculateSleepDuration(item.sleepTime, item.wakeUpTime) }
             ]
         }
     },
@@ -140,7 +140,7 @@ export default {
                 date: this.date,
                 sleepTime: this.sleepTime,
                 wakeUpTime: this.wakeUpTime,
-                sleepDuration: this.sleepTime - this.wakeUpTime,
+                sleepDuration: this.calculateSleepDuration(this.sleepTime, this.wakeUpTime),
             }
             this.entryList.push(newEntry);
             localStorage.setItem(`${this.$store.userInfo.id}-sleep-entries`, JSON.stringify(this.entryList));
@@ -151,6 +151,29 @@ export default {
             this.sleepTime = null;
             this.wakeUpTime = null;
         },
+        calculateSleepDuration(sleepTime, wakeTime) {
+            // Convert sleep time and wake time to hours and minutes
+            let [sleepHours, sleepMinutes] = sleepTime.split(':').map(Number);
+            let [wakeHours, wakeMinutes] = wakeTime.split(':').map(Number);
+
+            // Convert both times to total minutes since midnight
+            let sleepTotalMinutes = sleepHours * 60 + sleepMinutes;
+            let wakeTotalMinutes = wakeHours * 60 + wakeMinutes;
+
+            // If wake time is earlier in the day than sleep time, adjust for overnight
+            if (wakeTotalMinutes < sleepTotalMinutes) {
+                wakeTotalMinutes += 1440; // Add 24 hours worth of minutes
+            }
+
+            // Calculate the duration in minutes
+            let durationMinutes = wakeTotalMinutes - sleepTotalMinutes;
+
+            // Convert the total minutes back to hours and minutes
+            let durationHours = Math.floor(durationMinutes / 60);
+            durationMinutes = durationMinutes % 60;
+
+            return `${durationHours} hours and ${durationMinutes} minutes`;
+        }
     },
     mounted() {
         this.entryList = (localStorage.getItem(`${this.$store.userInfo.id}-sleep-entries`)) ?
